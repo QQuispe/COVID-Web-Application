@@ -15,16 +15,17 @@ with open('key.txt') as f:
     app_token = f.read()
 
 client = Socrata(data_url, app_token)      # Create the client to point to the API endpoint
+
 # Set the timeout to 4 minutes
 client.timeout = 240
 
 # Setting an excessively high limit to make sure all records are retrieved
-# TODO change this query to only retrieve new records
-results = client.get(cases_data_set, limit = 100000000)
-# Convert the list of dictionaries to a Pandas data frame
-covid_df = pd.DataFrame.from_records(results)
+# TODO change these queries to only retrieve new records
+cases_df = pd.DataFrame.from_records(client.get(cases_data_set, limit = 100000000))
+vaccinations_df = pd.DataFrame.from_records(client.get(vaccinations_data_set, limit = 100000000))
 
 #open connection to the database
 con = sqlite3.connect("covid.sqlite")
-covid_df.to_sql("cases", con, if_exists="replace")
+cases_df.to_sql("cases", con, if_exists="replace")
+vaccinations_df.to_sql("vaccinations",con, if_exists="replace")
 con.close()
