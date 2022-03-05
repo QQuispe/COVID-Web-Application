@@ -1,4 +1,3 @@
-from cmath import inf
 import sqlite3
 import pandas as pd
 from sodapy import Socrata
