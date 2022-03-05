@@ -10,9 +10,8 @@ data_url='data.cdc.gov'    # The Host Name for the API endpoint
 cases_data_set='nra9-vzzn' # Covid Cases data set
 vaccinations_data_set='8xkx-amqh' # Covid vaccinations dataset
 
-# Read Socrata API key from key.txt
-with open('key.txt') as f:
-    app_token = f.read()
+# Socrata API key
+app_token ='5FoiIo91nIpvXhetFuJ9yNAPA'
 
 client = Socrata(data_url, app_token)      # Create the client to point to the API endpoint
 
