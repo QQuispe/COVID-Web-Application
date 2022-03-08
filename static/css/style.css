@@ -1,0 +1,95 @@
+body {
+    background: #2f90e5;
+    color: black;
+    margin-top: 5rem;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
+  }
+  
+  ul {
+    margin: 0;
+  }
+  
+  .bg-nav {
+    background-color: #2f90e5;
+  }
+  
+  .button {
+    background-color: white;
+    color: #2f90e5;
+    padding: 18px 36px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 24px;
+    border-radius: 4px;
+    transition-duration: 0.4s;
+  }
+  
+  .button:hover {
+    background-color: #2f90e5;
+    color: white;
+  }
+  
+  /* main button css */
+  .b {
+    background-color: #2f90e5;
+    border: none;
+    color: white;
+    padding: 18px 62px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 24px;
+    border-radius: 4px;
+    transition-duration: 0.4s;
+  }
+  
+  .b:hover {
+    background-color: #236fb1;
+    color: white;
+  }
+  
+  .site-header .navbar-nav .nav-link {
+    color: #cbd5db;
+  }
+  
+  .site-header .navbar-nav .nav-link:hover {
+    color: #ffffff;
+  }
+  
+  .site-header .navbar-nav .nav-link.active {
+    font-weight: 500;
+  }
+  
+  .center {
+    margin: auto;
+    width: 80%;
+    padding: 10px;
+  }
+  
+  /* set text inside cards to black */
+  .card-body h1, h2, h3, h4, h5, h6 {
+    color: black;
+  }
+  
+  /* set text inside cards to black */
+  .card-body p {
+    color: black;
+  }
+
+  
+  .card {
+          margin: 0 auto; /* Added */
+          float: none; /* Added */
+          margin-bottom: 10px; /* Added */
+  }
+  
+  .container-fluid {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+  }

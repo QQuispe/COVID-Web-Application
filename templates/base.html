@@ -1,12 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
- 	
-<meta charset="utf-8">
- 	<title></title>
- 	<link href="style.css" rel="stylesheet" />
+	<title>CMSC 447 Team 2</title>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+	<!-- Bootstrap CSS -->
+	<link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+
+	<!--main css-->
+	<link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+
+	<!-- favicon -->
+	<link rel="shortcut icon" type="image/png" href="#" />
+
+	<!-- JQuery Library-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+	<!-- Background
+    <style>
+        body{
+            background: url("") no-repeat fixed center;
+            background-size: cover;
+            height: 100vh;
+            position: relative;
+        }
+    </style>
+	-->
 </head>
+
 <body>
-	<h1>CMSC 447 Team 2</h1>
+	<!-- Navigation -->
+	<header class="site-header">
+		<nav class="navbar navbar-expand-md navbar-dark bg-nav fixed-top">
+			<div class="container">
+				<a class="navbar-brand mr-4" href="#">CMSC 447 Team 2</a>
+				<button aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation"
+					class="navbar-toggler" data-target="#navbarToggle" data-toggle="collapse" type="button">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarToggle">
+					<div class="navbar-nav mr-auto">
+						<a class="nav-item nav-link" href="#">Home</a>
+						<a class="nav-item nav-link" href="#">Link</a>
+					</div>
+					<!-- Navbar Right Side
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="#">Link 1</a>
+                    <a class="nav-item nav-link" href="#">Link 2</a>
+                </div>
+                 -->
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	<div class="container-fluid">
+		{% block content %}{% endblock %}
+	</div>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
