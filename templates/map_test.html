@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card card-body" style="max-width: 80rem;">
+    <div>
+        <h1 style="text-align: center">Project Title</h1>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <form method="get">
+                    <div class="form-group">
+                        <label for="query1">Query 1</label>
+                        <input class="form-control" id="query1" placeholder="Query 1" type="text" name="query1"
+                            required />
+                    </div>
+                    <div class="form-group">
+                        <label for="query2">Query 2</label>
+                        <input class="form-control" id="query2" placeholder="Query 2" type="text" name="query2"
+                            required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="query3">Query 3</label>
+                        <select class="form-control" id="query3">
+                            <option>Option 1</option>
+                            <option>Option 2</option>
+                            <option>Option 3</option>
+                            <option>Option 4</option>
+                            <option>Option 5</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-lg btn-block b hover" type="submit">Submit</button>
+                </form>
+            </div>
+            <div class="col-md">
+                <div class="top-buffer">
+                    <!--The div element for the map -->
+                    <div id="map"></div>
+                    {{ map | safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
