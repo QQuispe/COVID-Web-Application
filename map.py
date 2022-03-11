@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/', methods = ['GET', 'POST'])
 def index():
     if request.method == 'GET':
-        return render_template('home.html')
+        return render_template('home.html',cases = None, map=exploration_and_cleaning()._repr_html_())
     else:
         state_query = (
             request.form['state_name'],
