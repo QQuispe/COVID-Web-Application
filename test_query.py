@@ -1,6 +1,7 @@
 from cgi import test
 import sqlite3
 import folium
+from numpy import empty
 import pandas as pd
 
 def query_db(query):
@@ -26,4 +27,10 @@ def query_db(query):
 
     test_df = cases_df.groupby(['state_name','county_name'])[['cases']].mean()
     test_df = test_df.reset_index()
-    return test_df[(test_df.state_name == x) & (test_df.county_name == y)]['cases'].item() 
+
+    #return 0 if value not found
+    val = test_df[(test_df.state_name == x) & (test_df.county_name == y)]
+    if val.empty:
+        return 0
+    else:
+        return val['cases'].item()

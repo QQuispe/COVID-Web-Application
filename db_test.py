@@ -5,7 +5,7 @@ import folium
 import sqlite3
 import pandas as pd
 
-def exploration_and_cleaning():
+def make_map():
     con = sqlite3.connect("covid.sqlite")
     cur = con.cursor()
 
