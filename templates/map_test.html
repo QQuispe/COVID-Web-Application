@@ -7,20 +7,24 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <form method="get">
+                <form method="post">
                     <div class="form-group">
-                        <label for="query1">Query 1</label>
-                        <input class="form-control" id="query1" placeholder="Query 1" type="text" name="query1"
-                            required />
+                        <label for="state_name">State</label>
+                        <select class="form-control" id="state_name" name="state_name" value="{{request.form['state_name']}}"required>
+                            <option>Alabama</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label for="query2">Query 2</label>
-                        <input class="form-control" id="query2" placeholder="Query 2" type="text" name="query2"
-                            required />
+                        <label for="county_name">County</label>
+                        <select class="form-control" id="county_name" name="county_name" value="{{request.form['county_name']}}"required>
+                            <option>Autauga County</option>
+                            <option>Baldwin County</option>
+                            <option>Barbour County</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="query3">Query 3</label>
+                        <label for="query3">Other query</label>
                         <select class="form-control" id="query3">
                             <option>Option 1</option>
                             <option>Option 2</option>
@@ -30,8 +34,9 @@
                         </select>
                     </div>
 
-                    <button class="btn btn-lg btn-block b hover" type="submit">Submit</button>
+                    <button class="btn btn-lg btn-block b hover" type="submit" value="Save">Submit</button>
                 </form>
+                <p>Average number of cases in the past 30 days: {{ cases }}</p>
             </div>
             <div class="col-md">
                 <div class="top-buffer">
