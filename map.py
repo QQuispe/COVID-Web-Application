@@ -1,5 +1,6 @@
-from flask import Flask, flash, render_template
+from flask import Flask, flash, render_template, request
 from db_test import *
+from test_query import *
 import folium
 
 app = Flask(__name__)
@@ -22,10 +23,18 @@ def map2():
     return exploration_and_cleaning()._repr_html_()
 
 # Test page with form and map
-@app.route('/map3')
+@app.route('/map3', methods = ['GET', 'POST'])
 def map3():
-    map = exploration_and_cleaning()
-    return render_template('map_test.html', map=map._repr_html_())
+    if request.method == 'GET':
+        return render_template('map_test.html')
+    else:
+        state_query = (
+            request.form['state_name'],
+            request.form['county_name']
+        )
+        cases = query_db(state_query)
+        map = exploration_and_cleaning()
+        return render_template('map_test.html', cases=cases, map=map._repr_html_())
 
 if __name__ == '__main__':
     app.run(debug=True)
