@@ -43,21 +43,24 @@ def exploration_and_cleaning():
     plot_df = plot_df.groupby('fips_code').agg({'cases' : 'mean'}).reset_index()
     plot_df['STATE'] = plot_df.fips_code.apply(lambda x: x[0:2])
     plot_df['County'] = plot_df.fips_code.apply(lambda x: x[2:5])
-
+    plot_df['plot_cases'] = plot_df.cases.map(lambda x: min(x,500))
+    
     # initialize the map and store it in a m object
-    m = folium.Map(location=[40, -95], zoom_start=4)
+    
+
+    m = folium.Map(location=[40, -95], zoom_start=4,tiles = None)
 
     folium.Choropleth(
         geo_data=counties,
-        name="choropleth",
+        name="Covid Cases",
         data=plot_df,
-        columns=["fips_code", "cases"],
+        columns=["fips_code", "plot_cases"],
         key_on="feature.id",
-        fill_color="YlGn",
+        fill_color="YlOrRd",
         fill_opacity=0.7,
-        line_opacity=.1,
-        legend_name="Cases per 100K average",
-    ).add_to(m)
+        line_opacity=1,
+        legend_name="Average Daily Cases per 100K"
+        ).add_to(m)
 
     folium.LayerControl().add_to(m)
 
