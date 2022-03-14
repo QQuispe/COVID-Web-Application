@@ -5,6 +5,8 @@ import folium
 import sqlite3
 import pandas as pd
 
+from database_update import get_counties_geojson
+
 def make_map():
     con = sqlite3.connect("covid.sqlite")
     cur = con.cursor()
@@ -34,10 +36,7 @@ def make_map():
     plot_df = cases_df.copy()
     plot_df = plot_df.groupby('fips_code').agg({'cases' : 'mean'}).reset_index()
 
-    from urllib.request import urlopen
-    import json
-    with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json') as response:
-        counties = json.load(response)
+    counties = get_counties_geojson()
 
     plot_df = cases_df.copy()
     plot_df = plot_df.groupby('fips_code').agg({'cases' : 'mean'}).reset_index()

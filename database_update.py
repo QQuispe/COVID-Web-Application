@@ -2,7 +2,12 @@ import sqlite3
 import pandas as pd
 from sodapy import Socrata
 from flask import g
+from os.path import exists
+from urllib.request import urlopen
+import json
 
+#file that contains geojson shapes of counties
+counties_file = 'counties_geo.json'
 data_addr = "https://data.cdc.gov/resource/nra9-vzzn.json"
 
 
@@ -37,6 +42,19 @@ def create_states_table():
     cur.execute('CREATE TABLE counties AS SELECT DISTINCT state_name, county_name from cases ORDER BY state_name, county_name ASC')
     con.commit()
     con.close()
+
+def download_geojson():
+    with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json') as response:
+        counties = json.load(response)
+    with open(counties_file,'w') as file:
+        json.dump(counties, file)
+
+def get_counties_geojson():
+    if not exists(counties_file):
+        download_geojson()
+        
+    with open(counties_file) as file:
+        return json.load(file)
 
 def get_db():
     if 'db' not in g:

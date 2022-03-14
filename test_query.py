@@ -31,6 +31,6 @@ def query_db(query):
     #return 0 if value not found
     val = test_df[(test_df.state_name == x) & (test_df.county_name == y)]
     if val.empty:
-        return 0
+        return None
     else:
-        return val['cases'].item()
+        return round(val['cases'].item(), 1)
