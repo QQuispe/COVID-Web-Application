@@ -1,6 +1,6 @@
-from flask import Flask, flash, render_template, request
+from flask import Flask, flash, render_template, request, jsonify
 from db_test import *
-from test_query import *
+from database_query import *
 from database_update import *
 
 app = Flask(__name__)
@@ -13,7 +13,7 @@ def index():
     counties = db.execute('SELECT * FROM counties').fetchall()
 
     if request.method == 'GET':
-        return render_template('home.html',cases = None, map=make_map()._repr_html_(), states = states, counties = counties)
+        return render_template('home.html',cases = None, map=make_map()._repr_html_(), states = states, counties = counties, state_query = None)
     else:
         state_query = (
             request.form['state_name'],
@@ -21,7 +21,21 @@ def index():
         )
         cases = query_db(state_query)
         map = make_map()
-        return render_template('home.html', cases=cases, map=map._repr_html_(), states = states, counties = counties)
+        return render_template('home.html', cases=cases, map=map._repr_html_(), states = states, counties = counties, state_query = state_query)
+
+# Populate counties per state
+@app.route('/county/<state>')
+def county(state):
+    db = get_db()
+    countyArr = []
+    counties = db.execute("""SELECT * FROM counties WHERE state_name = ?""", (state,))
+    for row in counties:
+        countyObj = {
+            'state' : row[0],
+            'name' : row[1]
+        }
+        countyArr.append(countyObj)
+    return jsonify({'counties': countyArr})
 
 if __name__ == '__main__':
     app.run(debug=True)
