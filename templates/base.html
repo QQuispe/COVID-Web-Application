@@ -61,7 +61,6 @@
 	<div class="container-fluid">
 		{% block content %}{% endblock %}
 	</div>
-
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -70,5 +69,23 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<!-- script to change county dropdown based on selected state -->
+	<script>
+		state_select = document.getElementById('state_name');
+		county_select = document.getElementById('county_name');
+
+		state_select.onchange = function () {
+			state = state_select.value;
+			fetch('county/' + state).then(function (response) {
+				response.json().then(function (data) {
+					option_html = '';
+					for (county_name of data.counties) {
+						option_html += '<option value="' + county_name.name + '">' + county_name.name + '</option>'
+					}
+					county_select.innerHTML = option_html;
+				});
+			});
+		}
+	</script>
 </body>
 </html>
