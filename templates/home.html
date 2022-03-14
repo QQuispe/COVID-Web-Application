@@ -10,26 +10,23 @@
                 <form method="post">
                     <div class="form-group">
                         <label for="state_name"><h4>State:</h4></label>
-                        <select class="form-control" id="state_name" name="state_name" value="{{request.form['state_name']}}"required>
+                        <select class="form-control" id="state_name" name="state_name" required>
+                            <option hidden>Select a state</option>
                             {% for state in states %}
-                                <option>{{ state['state_name']}}</option>
+                                <option value="{{state['state_name']}}">{{ state['state_name']}}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="county_name"><h4>County:</h4></label>
-                        <select class="form-control" id="county_name" name="county_name" value="{{request.form['county_name']}}"required>
-                            {% for county in counties %}
-                                    <option>{{ county['county_name'] }}</option>
-                            {% endfor %}
-                        </select>
+                        <select class="form-control" id="county_name" name="county_name" required></select>
                     </div>
 
-                    <button class="btn btn-lg btn-block b hover" type="submit" value="Save">Submit</button>
+                    <button class="btn btn-lg btn-block b hover" type="submit" value="submit">Submit</button>
                 </form>
                 &nbsp;
                 <h4>Statistics:</h4>
-                <p>Average number of cases in the past 30 days: {{ cases }}</p>
+                <p>Average number of cases in the past 30 days for {{state_query[1]}}, {{state_query[0]}}: {{ cases }}</p>
             </div>
             <div class="col-md">
                 <div class="top-buffer">
