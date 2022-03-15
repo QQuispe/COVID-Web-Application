@@ -1,49 +1,21 @@
-# Move all code from exploration_and_cleaning.ipynb into a function to use with map.py
-
-# import the folium library
 import folium
 import sqlite3
 import pandas as pd
-
 from database_update import get_counties_geojson
 
 def make_map():
     con = sqlite3.connect("covid.sqlite")
     cur = con.cursor()
 
-    cases_df = pd.read_sql_query("SELECT * FROM cases WHERE date >= DATE('now','-31 day') ORDER BY date DESC", con)
+    plot_df = pd.read_sql_query("""SELECT state_name, county_name, fips_code, avg(replace(replace(cases_per_100k_7_day_count,'suppressed','0'),',','')) as cases 
+    FROM cases 
+    WHERE date >= DATE('now','-31 day')
+    GROUP BY fips_code""", con)
 
-    cases_df = cases_df.rename(columns={'cases_per_100k_7_day_count' : 'cases','percent_test_results_reported':'test_percent','community_transmission_level' : 'severity'  })
-
-    #change suppressed to zero
-    cases_df.loc[cases_df.cases == "suppressed",'cases'] = "0"
-    #remove commas
-    cases_df.cases = cases_df.cases.apply(lambda x: x.replace(',',''))
-    #now cases can be converted to a numeric data type
-    cases_df.cases = cases_df.cases.astype(float)
-    cases_df = cases_df.sort_values(by = ['cases'])
-
-    cases_df = cases_df.sort_values(by = ['test_percent'])
-
-    #change None to zero
-    cases_df.test_percent.fillna("0", inplace = True)
-    #remove commas
-    cases_df.test_percent = cases_df.test_percent.apply(lambda x: x.replace(',',''))
-    #now test percent can be converted to a numeric data type
-    cases_df.test_percent = cases_df.test_percent.astype(float)
-    cases_df = cases_df.sort_values(by = ['test_percent'])
-
-    plot_df = cases_df.copy()
-    plot_df = plot_df.groupby('fips_code').agg({'cases' : 'mean'}).reset_index()
-
-    counties = get_counties_geojson()
-
-    plot_df = cases_df.copy()
-    plot_df = plot_df.groupby('fips_code').agg({'cases' : 'mean'}).reset_index()
-    plot_df['STATE'] = plot_df.fips_code.apply(lambda x: x[0:2])
-    plot_df['County'] = plot_df.fips_code.apply(lambda x: x[2:5])
     #TODO determine cutoff programatically rather than hardcoded 500
     plot_df['plot_cases'] = plot_df.cases.map(lambda x: min(x,500))
+
+    counties = get_counties_geojson()
     
     # initialize the map and store it in a m object
     
