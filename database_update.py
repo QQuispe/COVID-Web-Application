@@ -41,6 +41,7 @@ def update_db():
 
     create_states_table()
 
+#create table containing just the states and their counties
 def create_states_table():
     con = sqlite3.connect("covid.sqlite")
     cur = con.cursor()

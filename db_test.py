@@ -42,6 +42,7 @@ def make_map():
     plot_df = plot_df.groupby('fips_code').agg({'cases' : 'mean'}).reset_index()
     plot_df['STATE'] = plot_df.fips_code.apply(lambda x: x[0:2])
     plot_df['County'] = plot_df.fips_code.apply(lambda x: x[2:5])
+    #TODO determine cutoff programatically rather than hardcoded 500
     plot_df['plot_cases'] = plot_df.cases.map(lambda x: min(x,500))
     
     # initialize the map and store it in a m object
@@ -58,7 +59,7 @@ def make_map():
         fill_color="YlOrRd",
         fill_opacity=0.7,
         line_opacity=1,
-        legend_name="Average Daily Cases per 100K"
+        legend_name="Weekly Cases per 100K"
         ).add_to(m)
 
     folium.LayerControl().add_to(m)
