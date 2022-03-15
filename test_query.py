@@ -8,8 +8,12 @@ def query_db(query):
     (x, y) = query
     con = sqlite3.connect("covid.sqlite")
     cur = con.cursor()
+
+    #get all cases from the past month
     cases_df = pd.read_sql_query("SELECT * FROM cases WHERE date >= DATE('now','-31 day') ORDER BY date DESC", con)
     cases_df = cases_df.rename(columns={'cases_per_100k_7_day_count' : 'cases','percent_test_results_reported':'test_percent','community_transmission_level' : 'severity'  })
+    
+    #convert cases and tests to a numeric data type
     #change suppressed to zero
     cases_df.loc[cases_df.cases == "suppressed",'cases'] = "0"
     #remove commas
@@ -22,13 +26,16 @@ def query_db(query):
     cases_df.test_percent = cases_df.test_percent.apply(lambda x: x.replace(',',''))
     #now test percent can be converted to a numeric data type
     cases_df.test_percent = cases_df.test_percent.astype(float)
+
+    #change object datatype to string
     cases_df.state_name = cases_df.state_name.astype('string') 
     cases_df.county_name = cases_df.county_name.astype('string') 
 
+    #condense daily case records to a monthly average
     test_df = cases_df.groupby(['state_name','county_name'])[['cases']].mean()
     test_df = test_df.reset_index()
 
-    #return 0 if value not found
+    
     val = test_df[(test_df.state_name == x) & (test_df.county_name == y)]
     if val.empty:
         return None

@@ -19,7 +19,7 @@ def index():
             request.form['state_name'],
             request.form['county_name']
         )
-        cases = query_db(state_query)
+        cases = county_cases_query(state_query[0], state_query[1])
         map = make_map()
         return render_template('home.html', cases=cases, map=map._repr_html_(), states = states, counties = counties, state_query = state_query)
 
