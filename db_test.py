@@ -3,13 +3,13 @@ import sqlite3
 import pandas as pd
 from database_update import get_counties_geojson
 
-def make_map():
+def make_map(days = 30):
     con = sqlite3.connect("covid.sqlite")
     cur = con.cursor()
 
-    plot_df = pd.read_sql_query("""SELECT state_name, county_name, fips_code, avg(replace(replace(cases_per_100k_7_day_count,'suppressed','0'),',','')) as cases 
+    plot_df = pd.read_sql_query(f"""SELECT state_name, county_name, fips_code, avg(replace(replace(cases_per_100k_7_day_count,'suppressed','0'),',','')) as cases 
     FROM cases 
-    WHERE date >= DATE('now','-31 day')
+    WHERE date >= DATE('now','-{days} day')
     GROUP BY fips_code""", con)
 
     #TODO determine cutoff programatically rather than hardcoded 500
@@ -17,9 +17,7 @@ def make_map():
 
     counties = get_counties_geojson()
     
-    # initialize the map and store it in a m object
-    
-
+    # initialize a blank map
     m = folium.Map(location=[40, -95], zoom_start=4,tiles = None)
 
     folium.Choropleth(
