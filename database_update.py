@@ -5,6 +5,7 @@ from flask import g
 from os.path import exists
 from urllib.request import urlopen
 import json
+import geopandas as gpd
 
 #file that contains geojson shapes of counties
 counties_file = 'counties_geo.json'
@@ -59,10 +60,14 @@ def download_geojson():
 
 def get_counties_geojson():
     if not exists(counties_file):
-        download_geojson()
-        
+        download_geojson()       
     with open(counties_file) as file:
         return json.load(file)
+
+def get_counties_geopandas():
+    if not exists(counties_file):
+        download_geojson()       
+    return gpd.read_file(counties_file)
 
 def get_db():
     if 'db' not in g:
