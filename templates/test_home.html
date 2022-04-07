@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card card-body" style="max-width: 80rem;">
+    <div>
+        <h1 style="text-align: center">Testing</h1>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <form method="post">
+
+                    <div class="form-group">
+                        
+                        <p>Search bar goes here</p>
+                        <p>Option to add additional location goes here</p>
+                        <p>Day slider goes here</p>
+                        <p>Additional query options</p>
+                    </div>
+
+                    <button class="btn btn-lg btn-block b hover" type="submit" value="submit">Submit</button>
+                </form>
+                &nbsp;
+                <h4>Statistics:</h4>
+                <p>Average number of cases in the past 30 days for {{state_query[1]}}, {{state_query[0]}}: {{ cases }}</p>
+            </div>
+            <div class="col-md">
+                <div class="top-buffer">
+                    <!--The div element for the map -->
+                    <div id="map"></div>
+                    {{ map | safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
