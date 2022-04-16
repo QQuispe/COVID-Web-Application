@@ -1,5 +1,6 @@
 *.sqlite
 *.json
+*.db
 .ipynb_checkpoints/*
 venv/
 __pycache__/
