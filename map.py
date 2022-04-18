@@ -31,15 +31,7 @@ def maptest():
     counties = db.execute('SELECT * FROM counties').fetchall()
 
     if request.method == 'GET':
-        return render_template('test_home.html',cases = None, map=make_map()._repr_html_(), states = states, counties = counties, state_query = None)
-    else:
-        state_query = (
-            request.form['state_name'],
-            request.form['county_name']
-        )
-        cases = county_cases_query(state_query[0], state_query[1])
-        map = make_map()
-        return render_template('test_home.html', cases=cases, map=map._repr_html_(), states = states, counties = counties, state_query = state_query)
+        return render_template('test_home.html',cases = None, map=make_map()._repr_html_(), states = states, counties = counties, state_query = None, cases_table = avg_cases_json())
 
 # Populate counties per state
 @app.route('/county/<state>')

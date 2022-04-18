@@ -1,36 +1,41 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 {% block content %}
 <div class="card card-body" style="max-width: 80rem;">
     <div>
         <h1 style="text-align: center">Testing</h1>
     </div>
     <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <form method="post">
-
-                    <div class="form-group">
-                        
-                        <p>Search bar goes here</p>
-                        <p>Option to add additional location goes here</p>
-                        <p>Day slider goes here</p>
-                        <p>Additional query options</p>
-                    </div>
-
-                    <button class="btn btn-lg btn-block b hover" type="submit" value="submit">Submit</button>
-                </form>
-                &nbsp;
-                <h4>Statistics:</h4>
-                <p>Average number of cases in the past 30 days for {{state_query[1]}}, {{state_query[0]}}: {{ cases }}</p>
-            </div>
-            <div class="col-md">
-                <div class="top-buffer">
-                    <!--The div element for the map -->
-                    <div id="map"></div>
-                    {{ map | safe }}
-                </div>
-            </div>
+        <div class="row">    
+            <div id="map"></div>
+            {{ map | safe }}
+        </div>
+        <div class="row center">
+            <table id="counties_table" class="table table-striped" width="100%">
+                <thead>
+                    <tr>
+                        <th>Locality</th>
+                        <th>State</th>
+                        <th>Cases</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in cases_table %}
+                        <tr>
+                            <td>{{ entry.county_name }}</td>
+                            <td>{{ entry.state_name }}</td>
+                            <td>{{ entry.cases }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 {% endblock content %}
+{% block scripts %}
+    <script>
+    $(document).ready(function () {
+        $('#counties_table').DataTable();
+    });
+    </script>
+{% endblock %}
