@@ -35,7 +35,17 @@
 {% block scripts %}
     <script>
     $(document).ready(function () {
-        $('#counties_table').DataTable();
+        $('#counties_table').DataTable({
+            columns: [
+                {data:'county'},
+                {data:'state'},
+                {data:'cases',
+                render: function(data, type) {
+                    return $.fn.dataTable.render.number( ',', '.', 1). display(data);
+                }
+                }
+                ]
+                });
     });
     </script>
 {% endblock %}
