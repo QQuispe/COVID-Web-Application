@@ -1,21 +1,13 @@
 import folium
-import sqlite3
-import pandas as pd
 import branca
 from database_update import get_counties_geopandas
+from database_query import avg_cases_table
 
 def make_map(days = 30):
-    con = sqlite3.connect("covid.sqlite")
-    cur = con.cursor()
-
-    plot_df = pd.read_sql_query(f"""SELECT state_name, county_name, fips_code, avg(replace(replace(cases_per_100k_7_day_count,'suppressed','0'),',','')) as cases 
-    FROM cases 
-    WHERE date >= DATE('now','-{days} day')
-    GROUP BY fips_code""", con)
-  
+    plot_df = avg_cases_table(days)  
     counties = get_counties_geopandas()
     counties = counties.merge(plot_df, left_on = "id", right_on = "fips_code",how = "inner")
-    #
+
     counties["rounded_cases"] = counties["cases"].map(lambda x: round(x,1))
 
     # initialize a blank map
@@ -31,6 +23,7 @@ def make_map(days = 30):
     )
 
     #styling function used by folium's geojson map
+    #fills each county with a color representative of its covid case rate
     def style_func(x):
         cases = x["properties"]["cases"]
         return {"weight": .3,#seems to provide the right sized border between counties
@@ -44,9 +37,25 @@ def make_map(days = 30):
     #Hover over tooltip that displays county names and cases.
     hover = folium.GeoJsonTooltip(
         fields=["county_name", "state_name", "rounded_cases"],
-        aliases=["County:", "State:", "Weekly Cases:"],
+        aliases=["Locality:", "State:", "Weekly Cases Per 100K:"],
         localize=True,
         sticky=False,
+        labels=True,
+        style="""
+            background-color: #F0EFEF;
+            border: 1px solid black;
+            border-radius: 3px;
+            box-shadow: 3px;
+        """,
+        max_width=800,
+        )
+
+    #popup that displays data when a county is clicked on
+    #this displays the same data as the hover tooltip
+    click = folium.GeoJsonPopup(
+        fields=["county_name", "state_name", "rounded_cases"],
+        aliases=["Locality:", "State:", "Weekly Cases Per 100K:"],
+        localize=True,
         labels=True,
         style="""
             background-color: #F0EFEF;
@@ -63,6 +72,7 @@ def make_map(days = 30):
         name = "Covid Cases",
         style_function=style_func,    
         tooltip=hover,
+        popup=click,
     ).add_to(m)
 
     #useful if additional layers are added later. no purpose to have it unless there are multiple selectable layers
