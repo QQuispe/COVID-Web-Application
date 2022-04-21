@@ -33,6 +33,16 @@ def maptest():
     if request.method == 'GET':
         return render_template('test_home.html',cases = None, map=make_map()._repr_html_(), states = states, counties = counties, state_query = None, cases_table = avg_cases_json())
 
+@app.route('/compare', methods = ['GET', 'POST'])
+def map2test():
+    db = get_db()
+    states = db.execute('SELECT DISTINCT state_name from counties').fetchall()
+    counties = db.execute('SELECT * FROM counties').fetchall()
+
+    if request.method == 'GET':
+        return render_template('compare.html',cases = None, map=make_map()._repr_html_(), states = states, counties = counties, state_query = None, cases_table = avg_cases_json())
+
+
 # Populate counties per state
 @app.route('/county/<state>')
 def county(state):
