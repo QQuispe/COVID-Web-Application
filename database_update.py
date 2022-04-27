@@ -2,7 +2,8 @@ import sqlite3
 import pandas as pd
 from sodapy import Socrata
 from flask import g
-from os.path import exists
+from os.path import exists, join
+from os import listdir, remove
 from urllib.request import urlopen
 import json
 import geopandas as gpd
@@ -39,8 +40,8 @@ def update_db():
     cases_df.to_sql("cases", con, if_exists="replace")
     #vaccinations_df.to_sql("vaccinations",con, if_exists="replace")
     con.close()
-
     create_states_table()
+    clear_cache()
 
 #create table containing just the states and their counties
 def create_states_table():
@@ -81,6 +82,11 @@ def close_db(e=None):
 
     if db is not None:
         db.close()
+
+def clear_cache():
+    cache_dir = "cache"
+    for f in listdir(cache_dir):
+        remove(join(cache_dir, f))
 
 if __name__ == '__main__':
     update_db()

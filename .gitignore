@@ -3,4 +3,5 @@
 *.db
 .ipynb_checkpoints/*
 venv/
+cache/
 __pycache__/

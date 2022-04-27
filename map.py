@@ -1,10 +1,10 @@
 import folium
 import branca
 from database_update import get_counties_geopandas
-from database_query import avg_cases_table
+from database_query import get_cases_table
 
 def make_map(days = 30):
-    plot_df = avg_cases_table(days)  
+    plot_df = get_cases_table(days)  
     counties = get_counties_geopandas()
     counties = counties.merge(plot_df, left_on = "id", right_on = "fips_code",how = "inner")
 

@@ -1,5 +1,5 @@
-from flask import Flask, flash, render_template, request, jsonify
-from db_test import *
+from flask import Flask, render_template, request, jsonify
+from map import *
 from database_query import *
 from database_update import *
 
@@ -31,7 +31,7 @@ def maptest():
     counties = db.execute('SELECT * FROM counties').fetchall()
 
     if request.method == 'GET':
-        return render_template('test_home.html',cases = None, map=make_map()._repr_html_(), states = states, counties = counties, state_query = None, cases_table = avg_cases_json())
+        return render_template('test_home.html',cases = None, map=make_map()._repr_html_(), states = states, counties = counties, state_query = None, cases_table = get_avg_cases_json())
 
 @app.route('/compare', methods = ['GET', 'POST'])
 def map2test():
@@ -40,7 +40,7 @@ def map2test():
     counties = db.execute('SELECT * FROM counties').fetchall()
 
     if request.method == 'GET':
-        return render_template('compare.html',cases = None, map=make_map()._repr_html_(), states = states, counties = counties, state_query = None, cases_table = avg_cases_json())
+        return render_template('compare.html',cases = None, map=make_map()._repr_html_(), states = states, counties = counties, state_query = None, cases_table = get_avg_cases_json())
 
 
 # Populate counties per state
