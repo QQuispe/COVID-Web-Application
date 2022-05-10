@@ -1,23 +1,18 @@
 import csv
 import sqlite3
+from urllib.request import urlopen
+import pandas as pd
 
 
 
 try:
-
-    with open('us-counties.csv', 'r') as covid:
-        data = csv.DictReader(covid)
-        ny_data = [(i['date'], i['county'], i['state'], i['fips'], i['cases'], i['deaths']) for i in data]
-
+    link = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-2022.csv"
+    df = pd.read_csv(link, index_col=0)
+    
     create_table = sqlite3.connect('covid-ny.db')
-    cursor = create_table.cursor()
-    cursor.execute('create table NYData(date, county, state, fips, cases, deaths);')
-    cursor.executemany("insert into NYData (date,county,state,fips,cases,deaths) VALUES(?,?,?,?,?,?);", ny_data)
-    cursor.execute('select * from NYData;')
-    create_table.commit()
+    df.to_sql(name='covid-ny', con=create_table)
 
-    result = cursor.fetchall()
-    print(result)
+    create_table.commit()
 
 
 except sqlite3.Error as error:
