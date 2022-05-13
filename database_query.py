@@ -1,3 +1,7 @@
+"""
+This module provides functions for interacting with the database
+and performing certain queries
+"""
 from os.path import exists
 from os import mkdir
 import sqlite3
