@@ -17,6 +17,10 @@ ul {
   margin: 0;
 }
 
+.container{
+  max-width: 1600px;
+}
+
 .bg-nav {
   background-color: #2f90e5;
 }
