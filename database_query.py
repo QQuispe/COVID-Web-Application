@@ -7,7 +7,7 @@ from os import mkdir
 import sqlite3
 import pandas as pd
 
-def county_cases_query(county, state, days = 30):
+def county_cases_query(county, state, days):
     """
     Returns the average number of cases in a chosen area over a period of time
 
