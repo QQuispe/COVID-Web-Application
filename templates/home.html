@@ -22,12 +22,28 @@
                         <select class="form-control" id="county_name" name="county_name" required></select>
                     </div>
 
+                    <div style="padding-top: 10px;">
+                        <h5>Select number of days:</h5>
+                        <div class="box">
+                            <div class="slider">
+                                <input type="range" min="1" max="100" value="50" steps="1" id="range" name="days">
+                                <div class="value">
+                                    <span id="value"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <button class="btn btn-lg btn-block b hover" type="submit" value="submit">Submit</button>
                 </form>
                 &nbsp;
-                <h4>Statistics:</h4>
-                <p>Average number of cases in the past 30 days for {{state_query[1]}}, {{state_query[0]}}: {{ cases }}</p>
-            </div>
+                <div>
+                    <!--<h4>Statistics:</h4>
+                    <p>Average number of cases in the past {{ days }} day(s) for {{state_query[1]}}, {{state_query[0]}}: {{ cases }}</p>
+                    -->
+                    <p>{{ message }}</p>
+                </div>
+                </div>
             <div class="col-md">
                 <div class="top-buffer">
                     <!--The div element for the map -->
@@ -38,4 +54,18 @@
         </div>
     </div>
 </div>
+<script>
+    var slider = document.getElementById("range");
+    var output = document.getElementById("value");
+    output.innerHTML = slider.value;
+    slider.oninput = function () {
+        output.innerHTML = this.value;
+    }
+    slider.addEventListener("")
+    slider.addEventListener("input", function () {
+        var x = slider.value;
+        var color = 'blue';
+        slider.style.background = color;
+    })
+</script>
 {% endblock content %}
