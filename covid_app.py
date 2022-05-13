@@ -22,13 +22,17 @@ def index():
         cases = None,
         map=make_map(),
         states = states, counties = counties,
-        state_query = None)
+        state_query = None,
+        days = None)
     state_query = (
         request.form['state_name'],
         request.form['county_name']
     )
-    cases = county_cases_query(state_query[0], state_query[1])
-    return render_template('home.html', cases=cases, map=make_map(), states = states, counties = counties, state_query = state_query)
+    days = request.form['days']
+    cases = county_cases_query(state_query[0], state_query[1], int(days))
+    message = "Average number of cases in the past " + days + " day(s) for " + state_query[1] + ", " + state_query[0] + ": " + str(cases)
+
+    return render_template('home.html', cases=cases, map=make_map(), states = states, counties = counties, state_query = state_query, days = days, message=message)
 
 # Testing page
 @app.route('/test', methods = ['GET', 'POST'])
