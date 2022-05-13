@@ -65,6 +65,7 @@ def avg_cases_table(days = 30):
     FROM merged 
     WHERE date >= DATE('now','-{days} day')
     GROUP BY fips_code
+    HAVING total_deaths IS NOT NULL
     """,
     con)
     return table
