@@ -12,11 +12,11 @@ def make_map(days = 30):
     Keyword arguments:
     days -- the period of time for which the map should use data from (default 30)
     """
-    plot_df = get_cases_table(days)  
+    plot_df = get_cases_table(days) 
     counties = get_counties_geopandas()
     counties = counties.merge(plot_df, left_on = "id", right_on = "fips_code",how = "inner")
 
-    counties["rounded_cases"] = counties["cases"].map(lambda x: round(x,1))
+    counties["rounded_cases"] = counties["cases_per_cap"].map(lambda x: round(x,1))
 
     # initialize a blank map
     covid_map = folium.Map(location=[40, -95], zoom_start=4,tiles = None)
@@ -25,8 +25,8 @@ def make_map(days = 30):
     #.95 upper quantile to avoid outliers throwing off the color scale
     #colorscale from color brewer: https://colorbrewer2.org/#type=sequential&scheme=YlOrRd&n=5
     colormap = branca.colormap.LinearColormap(
-        vmin=plot_df["cases"].quantile(0.0),
-        vmax=plot_df["cases"].quantile(.95),
+        vmin=plot_df["cases_per_cap"].quantile(0.0),
+        vmax=plot_df["cases_per_cap"].quantile(.95),
         colors=['#ffffb2','#fecc5c','#fd8d3c','#f03b20','#bd0026'],
         caption = "Weekly Cases per 100K"
     )
@@ -34,7 +34,7 @@ def make_map(days = 30):
     #styling function used by folium's geojson map
     #fills each county with a color representative of its covid case rate
     def style_func(element):
-        cases = element["properties"]["cases"]
+        cases = element["properties"]["cases_per_cap"]
         return {"weight": .3,#seems to provide the right sized border between counties
         "fillColor": colormap(cases)
         if cases is not None
@@ -45,8 +45,8 @@ def make_map(days = 30):
 
     #Hover over tooltip that displays county names and cases.
     hover = folium.GeoJsonTooltip(
-        fields=["county_name", "state_name", "rounded_cases"],
-        aliases=["Locality:", "State:", "Weekly Cases Per 100K:"],
+        fields=["county_name", "state_name", "rounded_cases", "total_cases", "total_deaths"],
+        aliases=["Locality:", "State:", "Weekly Cases Per 100K:", "Total Cases:", "Total Deaths"],
         localize=True,
         sticky=False,
         labels=True,
@@ -62,8 +62,8 @@ def make_map(days = 30):
     #popup that displays data when a county is clicked on
     #this displays the same data as the hover tooltip
     click = folium.GeoJsonPopup(
-        fields=["county_name", "state_name", "rounded_cases"],
-        aliases=["Locality:", "State:", "Weekly Cases Per 100K:"],
+        fields=["county_name", "state_name", "rounded_cases", "total_cases", "total_deaths"],
+        aliases=["Locality:", "State:", "Weekly Cases Per 100K:", "Total Cases:", "Total Deaths"],
         localize=True,
         labels=True,
         style="""
