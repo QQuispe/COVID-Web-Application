@@ -21,12 +21,9 @@ CDC_DATA_REPO='data.cdc.gov'    # The Host Name for the API endpoint
 CDC_CASES_ID='nra9-vzzn' # Covid Cases data set
 CDC_VAX_ID='8xkx-amqh' # Covid vaccinations dataset
 SOCRATA_TOKEN ='5FoiIo91nIpvXhetFuJ9yNAPA' # Socrata API key
-COUNTY_GEOJSON_URL = """https://raw.githubusercontent.com/
-    plotly/datasets/master/geojson-counties-fips.json"""
-NYTIMES_COUNTIES_URL = """https://raw.githubusercontent.com/
-    nytimes/covid-19-data/master/us-counties.csv"""
-NYTIMES_2022_LINK = """https://raw.githubusercontent.com/
-    nytimes/covid-19-data/master/us-counties-2022.csv"""
+COUNTY_GEOJSON_URL = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json"
+NYTIMES_COUNTIES_URL = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
+NYTIMES_2022_LINK = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-2022.csv"
 
 DB_FILE = "covid.sqlite"
 
@@ -120,7 +117,7 @@ def download_geojson():
     """
     with urlopen(COUNTY_GEOJSON_URL) as response:
         counties = json.load(response)
-    with open(COUNTIES_FILE,'w',encoding=str) as file:
+    with open(COUNTIES_FILE,'w',encoding='utf-8') as file:
         json.dump(counties, file)
 
 def get_counties_geojson():
