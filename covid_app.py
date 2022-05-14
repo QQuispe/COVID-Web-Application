@@ -3,7 +3,7 @@ Flask app for managing the website
 """
 from flask import Flask, render_template, request, jsonify
 from map import make_map
-from database_query import get_avg_cases_json, county_cases_query
+from database_query import get_avg_cases_json, county_cases_query, get_county_results
 from database_update import get_db
 
 app = Flask(__name__)
@@ -16,23 +16,36 @@ def index():
     database = get_db()
     states = database.execute('SELECT DISTINCT state_name from counties').fetchall()
     counties = database.execute('SELECT * FROM counties').fetchall()
+    cases_table = get_avg_cases_json()
 
     if request.method == 'GET':
         return render_template('home.html',
-        cases = None,
+        total_cases = 0, total_deaths = 0, vaccination_stat = 0, cases_per_stat = 0,
         map=make_map(),
         states = states, counties = counties,
-        state_query = None,
-        days = None)
+        cases_table = cases_table
+        )
     state_query = (
         request.form['state_name'],
         request.form['county_name']
     )
     days = request.form['days']
-    cases = county_cases_query(state_query[0], state_query[1], int(days))
-    message = "Average number of cases in the past " + days + " day(s) for " + state_query[1] + ", " + state_query[0] + ": " + str(cases)
+    total_cases, total_deaths, vaccination_stat, cases_per_stat = get_county_results(cases_table, state_query)
+    results_message = "Results for " +  state_query[1] + ", " + state_query[0] + " over the last " + days + " day(s):"
 
-    return render_template('home.html', cases=cases, map=make_map(), states = states, counties = counties, state_query = state_query, days = days, message=message)
+
+    return render_template('home.html',
+        map=make_map(),
+        states = states,
+        counties = counties,
+        days = days,
+        results_message = results_message,
+        cases_table = cases_table,
+        total_cases = total_cases,
+        total_deaths = total_deaths,
+        vaccination_stat = vaccination_stat,
+        cases_per_stat = cases_per_stat,
+        )
 
 # Testing page
 @app.route('/test', methods = ['GET', 'POST'])
@@ -84,6 +97,7 @@ def county(state):
     """
     database = get_db()
     county_arr = []
+
     counties = database.execute("""SELECT * FROM counties WHERE state_name = ?""", (state,))
     for row in counties:
         county_obj = {
