@@ -79,3 +79,28 @@ def get_avg_cases_json(days = 30):
     days -- the period of time over which to aggregate the data (default 30)
     """
     return get_cases_table(days).to_dict(orient='records')
+
+def get_county_results(table, state_query):
+    """
+    Get relevant COVID iformation from cases_table based on selected county
+
+    Keyword arguments:
+    table -- cases table from above
+    state_query -- name of county and state that was selected on main form
+    """
+    county_name = state_query[1]
+    state_name = state_query[0]
+
+    county_row = (next(item for item in table if item['state_name'] == state_name and item['county_name'] == county_name))
+
+    # Map matched county's data to values that will be returned to front end
+    for k, v in county_row.items():
+        if k == 'total_cases':
+            total_cases = v
+        if k == 'total_deaths':
+            total_deaths = v
+        if k == 'fips_code':
+            vaccination_stat = v
+        if k == 'cases_per_cap':
+            cases_per_stat = round(v, 1)
+    return total_cases, total_deaths, vaccination_stat, cases_per_stat
