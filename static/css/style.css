@@ -93,6 +93,41 @@ h6 {
   color: black;
 }
 
+.card-head {
+  color:white;
+  font-weight: bold;
+}
+
+.card-body .stats1 {
+  
+  color: white;
+  border-radius: .375rem;
+  background: Linear-gradient(45deg, #2e52cb 25%, #6ab7fa 100%);
+  
+}
+
+.card-body .stats2 {
+  color: white;
+  background: Linear-gradient(45deg, #a30fff 25%, #cd7cff 100%);
+  border-radius: .375rem;
+}
+
+.card-body .stats3 {
+  color: white;
+  background: Linear-gradient(45deg, #16b357 25%, #51ff9a 100%);
+  border-radius: .375rem;
+}
+
+.card-body .stats4 {
+  color: white;
+  background: Linear-gradient(45deg, #ff6e15 25%, #ffa871 100%);
+  border-radius: .375rem;
+}
+
+.card-hover:hover{
+  box-shadow: 1x 2px 2px 1px;
+  transform: scale(1.02);
+}
 
 .card {
   margin: 0 auto;
@@ -101,6 +136,7 @@ h6 {
   /* Added */
   margin-bottom: 10px;
   /* Added */
+  border: none;
 }
 
 .container-fluid {
@@ -143,3 +179,7 @@ h6 {
 }
 .floatLeft { width: 50%; float: left; }
 .floatRight {width: 50%; float: right; }
+
+.icon-size{ 
+  font-size:25px; 
+}
