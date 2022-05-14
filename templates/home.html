@@ -1,56 +1,149 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="card card-body" style="max-width: 100rem;">
+<div class="card card-body" style="max-width: 80rem;">
     <div>
-        <h1 style="text-align: center">COVID Map</h1>
+        <h1 style="text-align: center">COVID Web App</h1>
     </div>
     <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <form method="post">
+        <h3>Select</h3>
+        <form method="post">
+            <div class="row">
+                <div class="col-md">
                     <div class="form-group">
-                        <label for="state_name"><h4>State:</h4></label>
+                        <label for="state_name">
+                            <h5>State:</h5>
+                        </label>
                         <select class="form-control" id="state_name" name="state_name" required>
                             <option hidden>Select a state</option>
                             {% for state in states %}
-                                <option value="{{state['state_name']}}">{{ state['state_name']}}</option>
+                            <option value="{{state['state_name']}}">{{ state['state_name']}}</option>
                             {% endfor %}
                         </select>
                     </div>
+                </div>
+
+                <div class="col-md">
                     <div class="form-group">
-                        <label for="county_name"><h4>County:</h4></label>
+                        <label for="county_name">
+                            <h5>County:</h5>
+                        </label>
                         <select class="form-control" id="county_name" name="county_name" required></select>
                     </div>
+                </div>
+            </div>
 
-                    <div style="padding-top: 10px;">
-                        <h5>Select number of days:</h5>
-                        <div class="box">
-                            <div class="slider">
-                                <input type="range" min="1" max="100" value="50" steps="1" id="range" name="days">
-                                <div class="value">
-                                    <span id="value"></span>
+            <h5>Select number of days:</h5>
+            <div class="box">
+                <div class="slider">
+                    <input type="range" min="1" max="100" value="50" steps="1" id="range" name="days">
+                    <div class="value">
+                        <span id="value"></span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-lg btn-block b hover" type="submit" value="submit">Submit</button>
+        </form>
+        <hr/>
+        <div>
+            <h3>Statistics</h3>
+            <h5>{{ results_message }}</h5>
+            <!-- Statistics cards-->
+            <div class="row">
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card mb-4 mb-xl-0">
+                        <div class="card-body stats1 card-hover">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-head mb-0">Total cases</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ total_cases }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-globe-americas icon-size"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <button class="btn btn-lg btn-block b hover" type="submit" value="submit">Submit</button>
-                </form>
-                &nbsp;
-                <div>
-                    <!--<h4>Statistics:</h4>
-                    <p>Average number of cases in the past {{ days }} day(s) for {{state_query[1]}}, {{state_query[0]}}: {{ cases }}</p>
-                    -->
-                    <p>{{ message }}</p>
                 </div>
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card mb-4 mb-xl-0">
+                        <div class="card-body stats2 card-hover">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-head mb-0">Total deaths</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ total_deaths }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-hospital-symbol icon-size"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            <div class="col-md">
-                <div class="top-buffer">
-                    <!--The div element for the map -->
-                    <div id="map"></div>
-                    {{ map | safe }}
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card mb-4 mb-xl-0">
+                        <div class="card-body stats3 card-hover">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-head mb-0">Vaccination Rate</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ vaccination_stat }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-syringe icon-size"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card mb-4 mb-xl-0">
+                        <div class="card-body stats4 card-hover">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-head mb-0">Cases per capita</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ cases_per_stat }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-user icon-size"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+        <hr/>
+        <h3>Map</h3>
+        <div class="top-buffer">
+            <!--The div element for the map -->
+            <div id="map"></div>
+            {{ map | safe }}
+        </div>
+        <hr/>
+        <h3>Compare</h3>
+        <div class="row center">
+            <table id="counties_table" class="table table-striped" width="100%">
+                <thead>
+                    <tr>
+                        <th>Locality</th>
+                        <th>State</th>
+                        <th>Recent Cases Per Capita</th>
+                        <th>Total Cases</th>
+                        <th>Total Deaths</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in cases_table %}
+                        <tr>
+                            <td>{{ entry.county_name }}</td>
+                            <td>{{ entry.state_name }}</td>
+                            <td>{{ entry.cases_per_cap }}</td>
+                            <td>{{ entry.total_cases }}</td>
+                            <td>{{ entry.total_deaths }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -67,5 +160,31 @@
         var color = 'blue';
         slider.style.background = color;
     })
+</script>
+<script>
+    $(document).ready(function () {
+        $('#counties_table').DataTable({
+            columns: [
+                {data:'county'},
+                {data:'state'},
+                {data:'cases',
+                render: function(data, type) {
+                    return $.fn.dataTable.render.number( ',', '.', 1). display(data);
+                },
+                },
+                {data:'Total Cases',
+                render: function(data, type) {
+                    return $.fn.dataTable.render.number( ',', '.', 0). display(data);
+                },
+                },
+                {data:'Total Deaths',
+                render: function(data, type) {
+                    return $.fn.dataTable.render.number( ',', '.', 0). display(data);
+                },
+                }
+                ],
+            stateSave: true,
+            });
+    });
 </script>
 {% endblock content %}
