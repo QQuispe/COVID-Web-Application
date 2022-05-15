@@ -19,23 +19,17 @@ def index():
     cases_table = get_avg_cases_json()
 
     if request.method == 'GET':
-        return render_template('home.html',
-        total_cases = 0, total_deaths = 0, vaccination_stat = 0, cases_per_stat = 0,
-        map=make_map(),
-        states = states, counties = counties,
-        cases_table = cases_table
-        )
-    state_query = (
-        request.form['state_name'],
-        request.form['county_name']
-    )
-    days = request.form['days']
+        state_query = ("Maryland", "Montgomery County")
+        days = 30
+    else:
+        state_query = (request.form['state_name'], request.form['county_name'])
+        days = request.form['days']
     total_cases, total_deaths, vaccination_stat, cases_per_stat = get_county_results(cases_table, state_query)
-    results_message = "Results for " +  state_query[1] + ", " + state_query[0] + " over the last " + days + " day(s):"
+    results_message = f"Results for {state_query[1]}, {state_query[0]} over the last {days} days:"
 
 
     return render_template('home.html',
-        map=make_map(),
+        map=make_map(days),
         states = states,
         counties = counties,
         days = days,

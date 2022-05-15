@@ -60,8 +60,8 @@ def avg_cases_table(days = 30):
     """
     con = sqlite3.connect("covid.sqlite")
     table = pd.read_sql_query(f"""
-    SELECT state_name, county_name, fips_code, max(cases) as total_cases, max(deaths) as total_deaths,
-    avg(cases_weekly) as cases_per_cap
+    SELECT state_name, county_name, fips_code, CAST(max(cases) - min(cases) AS INT) as total_cases,
+    CAST(max(deaths) - min(deaths) AS INT) as total_deaths, avg(cases_weekly) as cases_per_cap
     FROM merged 
     WHERE date >= DATE('now','-{days} day')
     GROUP BY fips_code

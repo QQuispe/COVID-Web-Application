@@ -1,6 +1,6 @@
 @echo off
 echo Creating virtual environment
-py -m venv venv
+python3 -m venv venv
 call venv\Scripts\activate
 pip install flask
 pip install pandas

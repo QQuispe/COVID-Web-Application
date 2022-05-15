@@ -4,6 +4,7 @@ This module is used to update the database as well as manage various other data 
 
 import sqlite3
 import json
+from datetime import date, timedelta
 from os.path import exists, join
 from os import listdir, remove
 from urllib.request import urlopen
@@ -29,7 +30,7 @@ DB_FILE = "covid.sqlite"
 
 def update_db():
     """
-    Downloads the daily case data table and inserts it into the database
+    Download data and build the database
     """
 
     update_cdc()
@@ -48,8 +49,11 @@ def update_cdc():
     # Set the timeout to 4 minutes
     client.timeout = 240
 
+    #This is used to only download the last 120 days of data. This significantly improves
+    #the speed of the update process, and the older data is not currently used
+    start_date = (date.today() - timedelta(days=120)).strftime("%Y-%m-%d")
     # Setting an excessively high limit to make sure all records are retrieved
-    cases = client.get(CDC_CASES_ID, limit = 100000000)
+    cases = client.get(CDC_CASES_ID, limit = 100000000, where = f"date > '{start_date}'")
     cases_df = pd.DataFrame.from_records(cases)
 
     #open connection to the database
@@ -63,6 +67,8 @@ def update_nytimes():
     Downloads data from the New York Times
     """
     ny_df = pd.read_csv(NYTIMES_COUNTIES_URL, index_col=0)
+    #only keep last 120 days of data
+    ny_df = ny_df[ny_df.index > (date.today() - timedelta(days=120)).strftime("%Y-%m-%d")]
     con = sqlite3.connect(DB_FILE)
     ny_df.to_sql("nytimes", con, if_exists="replace")
     con.close()
@@ -113,7 +119,8 @@ def create_states_table():
     con.close()
 
 def download_geojson():
-    """Downloads the county geojson file and saves it locally
+    """
+    Downloads the county geojson file and saves it locally
     """
     with urlopen(COUNTY_GEOJSON_URL) as response:
         counties = json.load(response)
@@ -168,3 +175,4 @@ def clear_cache():
 
 if __name__ == '__main__':
     update_db()
+

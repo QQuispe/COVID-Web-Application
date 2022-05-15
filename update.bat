@@ -1,2 +1,2 @@
-call venv/Scripts/activate
-py database_update.py
+call venv\Scripts\activate
+venv\Scripts\python database_update.py
