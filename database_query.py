@@ -22,7 +22,7 @@ def county_cases_query(county, state, days):
     con = sqlite3.connect("covid.sqlite")
     #query for the average number of cases in that location over the specified time period
     cases_df = pd.read_sql_query(f"""
-    SELECT avg(cases_weekly) as cases 
+    SELECT avg(cases_daily) as cases 
     FROM merged 
     WHERE date >= DATE('now','-{days} day') AND state_name = '{county}' AND county_name = '{state}'
     """,
@@ -61,7 +61,7 @@ def avg_cases_table(days = 30):
     con = sqlite3.connect("covid.sqlite")
     table = pd.read_sql_query(f"""
     SELECT state_name, county_name, fips_code, CAST(max(cases) - min(cases) AS INT) as total_cases,
-    CAST(max(deaths) - min(deaths) AS INT) as total_deaths, avg(cases_weekly) as cases_per_cap
+    CAST(max(deaths) - min(deaths) AS INT) as total_deaths, avg(cases_daily) as cases_per_cap
     FROM merged 
     WHERE date >= DATE('now','-{days} day')
     GROUP BY fips_code

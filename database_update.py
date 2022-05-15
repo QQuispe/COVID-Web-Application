@@ -88,7 +88,7 @@ def merge_tables():
         cur.execute("DROP TABLE merged")
     cur.execute("""
     CREATE TABLE merged AS 
-    SELECT *, replace(replace(cases_per_100k_7_day_count,'suppressed','0'),',','') as cases_weekly
+    SELECT *, replace(replace(cases_per_100k_7_day_count,'suppressed','0'),',','')/7 as cases_daily
     FROM cdc c
     JOIN nytimes n
     ON c.fips_code = n.fips AND DATE(c.date) = n.date

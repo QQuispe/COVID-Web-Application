@@ -24,6 +24,7 @@ def index():
     else:
         state_query = (request.form['state_name'], request.form['county_name'])
         days = request.form['days']
+    cases_table = get_avg_cases_json(days)
     total_cases, total_deaths, vaccination_stat, cases_per_stat = get_county_results(cases_table, state_query)
     results_message = f"Results for {state_query[1]}, {state_query[0]} over the last {days} days:"
 
@@ -40,28 +41,6 @@ def index():
         vaccination_stat = vaccination_stat,
         cases_per_stat = cases_per_stat,
         )
-
-# Testing page
-@app.route('/test', methods = ['GET', 'POST'])
-def maptest():
-    """
-    Test Page
-    """
-    database = get_db()
-    states = database.execute('SELECT DISTINCT state_name from counties').fetchall()
-    counties = database.execute('SELECT * FROM counties').fetchall()
-
-    if request.method == 'GET':
-        return render_template(
-            'test_home.html',
-            cases = None,
-            map = make_map(),
-            states = states,
-            counties = counties,
-            state_query = None,
-            cases_table = get_avg_cases_json()
-            )
-
 @app.route('/compare', methods = ['GET', 'POST'])
 def map2test():
     """

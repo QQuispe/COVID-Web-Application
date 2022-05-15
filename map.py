@@ -46,7 +46,7 @@ def make_map(days = 30):
     #Hover over tooltip that displays county names and cases.
     hover = folium.GeoJsonTooltip(
         fields=["county_name", "state_name", "rounded_cases", "total_cases", "total_deaths"],
-        aliases=["Locality:", "State:", "Weekly Cases Per 100K:", "Total Cases:", "Total Deaths"],
+        aliases=["Locality:", "State:", "Daily Cases per 100K Residents:", "Total Cases:", "Total Deaths"],
         localize=True,
         sticky=False,
         labels=True,
@@ -63,7 +63,7 @@ def make_map(days = 30):
     #this displays the same data as the hover tooltip
     click = folium.GeoJsonPopup(
         fields=["county_name", "state_name", "rounded_cases", "total_cases", "total_deaths"],
-        aliases=["Locality:", "State:", "Weekly Cases Per 100K:", "Total Cases:", "Total Deaths"],
+        aliases=["Locality:", "State:", "Daily Cases per 100K Residents:", "Total Cases:", "Total Deaths"],
         localize=True,
         labels=True,
         style="""
