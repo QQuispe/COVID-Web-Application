@@ -3,8 +3,7 @@ Flask app for managing the website
 """
 from flask import Flask, render_template, request, jsonify
 from map import make_map
-from database_query import get_avg_cases_json, county_cases_query, get_county_results
-from database_update import get_db
+from database_query import get_avg_cases_json, get_counties_in_state, get_county_results, get_states, get_counties, get_counties_in_state
 
 app = Flask(__name__)
 
@@ -13,9 +12,9 @@ def index():
     """
     Home page of the website
     """
-    database = get_db()
-    states = database.execute('SELECT DISTINCT state_name from counties').fetchall()
-    counties = database.execute('SELECT * FROM counties').fetchall()
+    
+    states = get_states()
+    counties = get_counties()
     cases_table = get_avg_cases_json()
 
     if request.method == 'GET':
@@ -25,7 +24,7 @@ def index():
         state_query = (request.form['state_name'], request.form['county_name'])
         days = request.form['days']
     cases_table = get_avg_cases_json(days)
-    total_cases, total_deaths, vaccination_stat, cases_per_stat = get_county_results(cases_table, state_query)
+    total_cases, total_deaths, risk_level, cases_per_stat = get_county_results(cases_table, state_query)
     results_message = f"Results for {state_query[1]}, {state_query[0]} over the last {days} days:"
 
 
@@ -38,7 +37,7 @@ def index():
         cases_table = cases_table,
         total_cases = total_cases,
         total_deaths = total_deaths,
-        vaccination_stat = vaccination_stat,
+        risk_level = risk_level,
         cases_per_stat = cases_per_stat,
         )
 @app.route('/compare', methods = ['GET', 'POST'])
@@ -46,9 +45,8 @@ def map2test():
     """
     Comparison Test Page
     """
-    database = get_db()
-    states = database.execute('SELECT DISTINCT state_name from counties').fetchall()
-    counties = database.execute('SELECT * FROM counties').fetchall()
+    states = get_states()
+    counties = get_counties()
 
     if request.method == 'GET':
         return render_template(
@@ -68,10 +66,9 @@ def county(state):
     """
     Find a list of counties in a given state
     """
-    database = get_db()
+    
     county_arr = []
-
-    counties = database.execute("""SELECT * FROM counties WHERE state_name = ?""", (state,))
+    counties = get_counties_in_state(state)
     for row in counties:
         county_obj = {
             'state' : row[0],

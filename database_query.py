@@ -6,6 +6,7 @@ from os.path import exists
 from os import mkdir
 import sqlite3
 import pandas as pd
+from database_update import get_db
 
 def county_cases_query(county, state, days):
     """
@@ -60,12 +61,31 @@ def avg_cases_table(days = 30):
     """
     con = sqlite3.connect("covid.sqlite")
     table = pd.read_sql_query(f"""
-    SELECT state_name, county_name, fips_code, CAST(max(cases) - min(cases) AS INT) as total_cases,
-    CAST(max(deaths) - min(deaths) AS INT) as total_deaths, avg(cases_daily) as cases_per_cap
-    FROM merged 
-    WHERE date >= DATE('now','-{days} day')
-    GROUP BY fips_code
-    HAVING total_deaths IS NOT NULL
+    SELECT
+        a.fips_code as fips_code, risk_level, state_name,
+         county_name, total_cases, total_deaths, cases_per_cap
+    FROM
+        (
+        SELECT DISTINCT
+            fips_code, state_name, county_name,
+            last_value(community_transmission_level) OVER (
+                PARTITION BY fips_code
+                ORDER BY date ASC
+                RANGE BETWEEN UNBOUNDED PRECEDING AND 
+                UNBOUNDED FOLLOWING
+            ) as risk_level
+        FROM merged
+        ) AS a
+        JOIN
+        (
+        SELECT fips_code, CAST(max(cases) - min(cases) AS INT) as total_cases,
+            CAST(max(deaths) - min(deaths) AS INT) as total_deaths, avg(cases_daily) as cases_per_cap
+        FROM merged 
+        WHERE date >= DATE('now','-{days} day')
+        GROUP BY fips_code
+        HAVING total_deaths IS NOT NULL
+        ) AS b
+        ON a.fips_code = b.fips_code
     """,
     con)
     return table
@@ -99,8 +119,26 @@ def get_county_results(table, state_query):
             total_cases = v
         if k == 'total_deaths':
             total_deaths = v
-        if k == 'fips_code':
-            vaccination_stat = v
+        if k == 'risk_level':
+            risk_level = v
         if k == 'cases_per_cap':
             cases_per_stat = round(v, 1)
-    return total_cases, total_deaths, vaccination_stat, cases_per_stat
+    return total_cases, total_deaths, risk_level, cases_per_stat
+
+def get_states():
+    """
+    Get a list of states
+    """
+    return get_db().execute('SELECT DISTINCT state_name from counties').fetchall()
+
+def get_counties():
+    """
+    Get a table of states and counties
+    """
+    return get_db().execute('SELECT * FROM counties').fetchall()
+
+def get_counties_in_state(state):
+    """
+    Find all counties in a certain state
+    """
+    return get_db().execute("""SELECT * FROM counties WHERE state_name = ?""", (state,))
