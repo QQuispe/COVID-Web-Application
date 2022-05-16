@@ -24,7 +24,7 @@ def index():
         days = 30
     else:
         state_query = (request.form['state_name'], request.form['county_name'])
-        days = request.form['days']
+        days = int(request.form['days'])
     cases_table = get_avg_cases_json(days)
     total_cases, total_deaths, risk_level, cases_per_stat = get_county_results(cases_table, state_query)
     results_message = f"Statistics for {state_query[1]}, {state_query[0]} from {(datetime.today() - timedelta(days=days)).strftime('%B %d, %Y')} to {datetime.today().strftime('%B %d, %Y')}:"
