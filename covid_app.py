@@ -1,6 +1,8 @@
 """
 Flask app for managing the website
 """
+
+from datetime import datetime, timedelta
 from flask import Flask, render_template, request, jsonify
 from map import make_map
 from database_query import get_avg_cases_json, get_counties_in_state, get_county_results, get_states, get_counties, get_counties_in_state
@@ -25,7 +27,7 @@ def index():
         days = request.form['days']
     cases_table = get_avg_cases_json(days)
     total_cases, total_deaths, risk_level, cases_per_stat = get_county_results(cases_table, state_query)
-    results_message = f"Results for {state_query[1]}, {state_query[0]} over the last {days} days:"
+    results_message = f"Statistics for {state_query[1]}, {state_query[0]} from {(datetime.today() - timedelta(days=days)).strftime('%B %d, %Y')} to {datetime.today().strftime('%B %d, %Y')}:"
 
 
     return render_template('home.html',

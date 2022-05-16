@@ -60,7 +60,7 @@
                                     <span class="h2 font-weight-bold mb-0">{{ total_cases }}</span>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-globe-americas icon-size"></i>
+                                    <i class="fas fa-viruses icon-size"></i>
                                 </div>
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                                     <span class="h2 font-weight-bold mb-0">{{ total_deaths }}</span>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-hospital-symbol icon-size"></i>
+                                    <i class="fas fa-hospital icon-size"></i>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                                     <span class="h2 font-weight-bold mb-0">{{ risk_level }}</span>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-syringe icon-size"></i>
+                                    <i class="fas fa-head-side-cough icon-size"></i>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +107,7 @@
                                     <span class="h2 font-weight-bold mb-0">{{ cases_per_stat }}</span>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-user icon-size"></i>
+                                    <i class="fas fa-virus icon-size"></i>
                                 </div>
                             </div>
                         </div>
@@ -116,14 +116,12 @@
             </div>
         </div>
         <hr/>
-        <h3>Map</h3>
         <div class="top-buffer">
             <!--The div element for the map -->
             <div id="map"></div>
             {{ map | safe }}
         </div>
         <hr/>
-        <h3>Compare</h3>
         <div class="row center">
             <table id="counties_table" class="table table-striped" width="100%">
                 <thead>
