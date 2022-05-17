@@ -8,31 +8,6 @@ import sqlite3
 import pandas as pd
 from database_update import get_db
 
-def county_cases_query(county, state, days):
-    """
-    Returns the average number of cases in a chosen area over a period of time
-
-    Keyword arguments:
-    county -- the county or locality
-    state -- the state in which that county is located
-    days -- the number of preceding days over which to take the average
-    """
-    if(county is None or state is None):
-        return None
-
-    con = sqlite3.connect("covid.sqlite")
-    #query for the average number of cases in that location over the specified time period
-    cases_df = pd.read_sql_query(f"""
-    SELECT avg(cases_daily) as cases 
-    FROM merged 
-    WHERE date >= DATE('now','-{days} day') AND state_name = '{county}' AND county_name = '{state}'
-    """,
-    con)
-    if cases_df.empty:
-        return None
-    else:
-        return round(cases_df.cases[0], 1)
-
 def get_cases_table(days = 30):
     """
     Returns a dataframe with the average covid statistics over a period of time.
