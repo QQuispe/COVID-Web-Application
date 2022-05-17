@@ -11,19 +11,15 @@ from urllib.request import urlopen
 import pandas as pd
 from sodapy import Socrata
 from flask import g
-
-
 import geopandas as gpd
 
-#local file for geojson shapes of counties
-COUNTIES_FILE = 'counties_geo.json'
 
+COUNTIES_FILE = 'counties_geo.json' #local file for geojson shapes of counties
 CDC_DATA_REPO='data.cdc.gov'    # The Host Name for the API endpoint
 CDC_CASES_ID='nra9-vzzn' # Covid Cases data set
 CDC_VAX_ID='8xkx-amqh' # Covid vaccinations dataset
-SOCRATA_TOKEN ='5FoiIo91nIpvXhetFuJ9yNAPA' # Socrata API key
+SOCRATA_TOKEN ='5FoiIo91nIpvXhetFuJ9yNAPA' # Socrata API key.
 COUNTY_GEOJSON_URL = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json"
-NYTIMES_COUNTIES_URL = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
 NYTIMES_2022_LINK = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-2022.csv"
 
 DB_FILE = "covid.sqlite"
@@ -59,14 +55,13 @@ def update_cdc():
     #open connection to the database
     con = sqlite3.connect(DB_FILE)
     cases_df.to_sql("cdc", con, if_exists="replace")
-    #vaccinations_df.to_sql("vaccinations",con, if_exists="replace")
     con.close()
 
 def update_nytimes():
     """
     Downloads data from the New York Times
     """
-    ny_df = pd.read_csv(NYTIMES_COUNTIES_URL, index_col=0)
+    ny_df = pd.read_csv(NYTIMES_2022_LINK, index_col=0)
     #only keep last 120 days of data
     ny_df = ny_df[ny_df.index > (date.today() - timedelta(days=120)).strftime("%Y-%m-%d")]
     con = sqlite3.connect(DB_FILE)

@@ -84,8 +84,4 @@ def make_map(days = 30):
         popup=click,
     ).add_to(covid_map)
 
-    #useful if additional layers are added later. no purpose to have it unless there are multiple selectable layers
-    #will be useful if we want to add state level data to the map.
-    #folium.LayerControl().add_to(m)
-
     return covid_map._repr_html_()
