@@ -40,6 +40,19 @@ class Testing(unittest.TestCase):
         table2 = database_query.get_cases_table()
         self.assertTrue(table1.equals(table2))
 
+    def test_county_results(self):
+        """
+        test to ensure that get_county_results matches the data in the table
+        """
+        table1 = database_query.get_avg_cases_json()
+        state_query = ("Maryland", "Montgomery County")
+        total_cases, total_deaths, risk_level, cases_per_stat = database_query.get_county_results(table1, state_query)
+        table2 = database_query.get_cases_table()
+        record = table2[(table2.state_name == "Maryland") & (table2.county_name == "Montgomery County")]
+        self.assertEqual(total_cases, record.total_cases.values[0])
+        self.assertEqual(total_deaths, record.total_deaths.values[0])
+        self.assertEqual(risk_level, record.risk_level.values[0])
+        self.assertEqual(cases_per_stat, round(record.cases_per_cap.values[0],1))
     
 
 if __name__ == '__main__':
