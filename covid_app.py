@@ -8,6 +8,7 @@ from map import make_map
 from database_query import get_avg_cases_json, get_counties_in_state, get_county_results, get_states, get_counties, get_counties_in_state
 import webbrowser
 from threading import Timer
+link = "http://127.0.0.1:5000"
 
 app = Flask(__name__)
 
@@ -81,9 +82,6 @@ def county(state):
         county_arr.append(county_obj)
     return jsonify({'counties': county_arr})
 
-def open_webpage():
-    webbrowser.open_new('http://127.0.0.1:5000')
-
 if __name__ == '__main__':
-    Timer(1, open_webpage).start()
-    app.run(debug=True)
+    Timer(1, lambda: webbrowser.open_new(link)).start()
+    app.run(debug=False)
