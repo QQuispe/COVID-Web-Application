@@ -12,6 +12,6 @@ pip install missing_packages/Fiona-1.8.21-cp310-cp310-win_amd64.whl
 pip install geopandas
 echo Finished setting up the virtual environment
 echo Setting up the database. This may take several minutes
-call update.bat
+#call update.bat
 echo Database update complete
 call run.bat
