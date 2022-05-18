@@ -2,13 +2,13 @@
 Flask app for managing the website
 """
 
+import webbrowser
+from threading import Timer
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, jsonify
 from map import make_map
-from database_query import get_avg_cases_json, get_counties_in_state, get_county_results, get_states, get_counties, get_counties_in_state
-import webbrowser
-from threading import Timer
-link = "http://127.0.0.1:5000"
+from database_query import get_avg_cases_json, get_counties_in_state, get_county_results, get_states, get_counties
+LINK = "http://127.0.0.1:5000"
 
 app = Flask(__name__)
 
@@ -83,5 +83,5 @@ def county(state):
     return jsonify({'counties': county_arr})
 
 if __name__ == '__main__':
-    Timer(1, lambda: webbrowser.open_new(link)).start()
+    Timer(1, lambda: webbrowser.open_new(LINK)).start()
     app.run(debug=False)
