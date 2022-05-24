@@ -2,6 +2,7 @@
 *.json
 *.db
 .ipynb_checkpoints/*
+key.txt
 venv/
 cache/
 __pycache__/
