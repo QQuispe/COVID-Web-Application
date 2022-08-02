@@ -2,24 +2,27 @@
 This module is used to update the database as well as manage various other data sources
 """
 
-import sqlite3
-import json
 from datetime import date, timedelta
 from os.path import exists, join
 from os import listdir, remove
 from urllib.request import urlopen
-import pandas as pd
 from sodapy import Socrata
-from flask import g
+from flask import g, Flask
+from dotenv import load_dotenv
+import os
+import pandas as pd
+import sqlite3
+import json
 import geopandas as gpd
+
+load_dotenv()
 
 
 COUNTIES_FILE = 'counties_geo.json' #local file for geojson shapes of counties
 CDC_DATA_REPO='data.cdc.gov'    # The Host Name for the API endpoint
 CDC_CASES_ID='nra9-vzzn' # Covid Cases data set
 CDC_VAX_ID='8xkx-amqh' # Covid vaccinations dataset
-with open("../.env") as file:
-    SOCRATA_TOKEN = file.read()
+SOCRATA_TOKEN = os.getenv("SOCRATA") # Socrata App Token
 
 COUNTY_GEOJSON_URL = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json"
 NYTIMES_2022_LINK = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-2022.csv"
