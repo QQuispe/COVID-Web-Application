@@ -8,3 +8,5 @@ cache/
 __pycache__/
 .env
 missing_packages/
+share/
+pyvenv.cfg
