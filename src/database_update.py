@@ -18,7 +18,7 @@ COUNTIES_FILE = 'counties_geo.json' #local file for geojson shapes of counties
 CDC_DATA_REPO='data.cdc.gov'    # The Host Name for the API endpoint
 CDC_CASES_ID='nra9-vzzn' # Covid Cases data set
 CDC_VAX_ID='8xkx-amqh' # Covid vaccinations dataset
-with open("key.txt") as file:
+with open(".env") as file:
     SOCRATA_TOKEN = file.read()
 
 COUNTY_GEOJSON_URL = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json"

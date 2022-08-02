@@ -6,7 +6,7 @@ import webbrowser
 from threading import Timer
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, jsonify
-from map import make_map
+from generate_map import make_map
 from database_query import get_avg_cases_json, get_counties_in_state, get_county_results, get_states, get_counties
 LINK = "http://127.0.0.1:5000"
 
@@ -45,25 +45,6 @@ def index():
         risk_level = risk_level,
         cases_per_stat = cases_per_stat,
         )
-@app.route('/compare', methods = ['GET', 'POST'])
-def map2test():
-    """
-    Comparison Test Page
-    """
-    states = get_states()
-    counties = get_counties()
-
-    if request.method == 'GET':
-        return render_template(
-            'compare.html',
-            cases = None, 
-            map=make_map(),
-            states = states,
-            counties = counties,
-            state_query = None,
-            cases_table = get_avg_cases_json()
-            )
-
 
 # Populate counties per state
 @app.route('/county/<state>')

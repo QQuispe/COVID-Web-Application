@@ -1,8 +1,10 @@
 *.sqlite
 *.json
 *.db
-.ipynb_checkpoints/*
+.ipynb_checkpoints/
 key.txt
 venv/
 cache/
 __pycache__/
+.env
+missing_packages/
